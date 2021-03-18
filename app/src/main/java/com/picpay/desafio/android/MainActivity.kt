@@ -1,75 +1,70 @@
 package com.picpay.desafio.android
 
-import android.view.View
+import android.os.Bundle
+import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.picpay.desafio.android.core.BaseResource
+import com.picpay.desafio.android.domain.entity.UserEntity
+import com.picpay.desafio.android.presentation.MainViewModel
+import com.picpay.desafio.android.utils.hide
+import com.picpay.desafio.android.utils.show
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
+    private val viewModel: MainViewModel by viewModel()
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
-    private lateinit var adapter: UserListAdapter
+    private lateinit var userListAdapter: UserListAdapter
 
-    private val url = "http://careers.picpay.com/tests/mobdev/"
-
-    private val gson: Gson by lazy { GsonBuilder().create() }
-
-    private val okHttp: OkHttpClient by lazy {
-        OkHttpClient.Builder()
-            .build()
-    }
-
-    private val retrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(url)
-            .client(okHttp)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-    }
-
-    private val service: PicPayService by lazy {
-        retrofit.create(PicPayService::class.java)
-    }
-
-    override fun onResume() {
-        super.onResume()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         recyclerView = findViewById(R.id.recyclerView)
         progressBar = findViewById(R.id.user_list_progress_bar)
+        userListAdapter = UserListAdapter()
+        recyclerView.apply {
+            adapter = userListAdapter
+            recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+        }
 
-        adapter = UserListAdapter()
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        registerObservers()
 
-        progressBar.visibility = View.VISIBLE
-        service.getUsers()
-            .enqueue(object : Callback<List<User>> {
-                override fun onFailure(call: Call<List<User>>, t: Throwable) {
-                    val message = getString(R.string.error)
+        if (savedInstanceState == null) {
+            viewModel.getUsersList()
+        }
+    }
 
-                    progressBar.visibility = View.GONE
-                    recyclerView.visibility = View.GONE
+    private fun registerObservers() {
+        viewModel.usersListResponse.observe(this, usersListObserver)
+    }
 
-                    Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT)
-                        .show()
-                }
+    private val usersListObserver = Observer<BaseResource<List<UserEntity>>> {
+        progressBar.hide()
+        when (it) {
+            is BaseResource.Loading -> progressBar.show()
+            is BaseResource.Success -> handleUsersList(it.data)
+            is BaseResource.Failure -> showError(it.e)
+        }
+    }
 
-                override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
-                    progressBar.visibility = View.GONE
+    private fun handleUsersList(usersList: List<UserEntity>) {
+        userListAdapter.users = usersList
+    }
 
-                    adapter.users = response.body()!!
-                }
-            })
+    private fun showError(e: Exception) {
+        val message = getString(R.string.error)
+        recyclerView.hide()
+
+        Log.e("ERROR", "Detalhes do erro: $e")
+
+        Toast.makeText(this, message, Toast.LENGTH_LONG)
+            .show()
     }
 }
