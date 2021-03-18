@@ -21,13 +21,13 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", "\"http://careers.picpay.com/tests/mobdev\""
+            buildConfigField "String", "BASE_URL", "\"http://careers.picpay.com/tests/mobdev/\""
         }
 
         release {
             minifyEnabled true
             shrinkResources true
-            buildConfigField "String", "BASE_URL", "\"http://careers.picpay.com/tests/mobdev\""
+            buildConfigField "String", "BASE_URL", "\"http://careers.picpay.com/tests/mobdev/\""
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
