@@ -1,16 +1,15 @@
 package com.picpay.desafio.android
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.picpay.desafio.android.databinding.ListItemUserBinding
 import com.picpay.desafio.android.domain.entity.UserEntity
 import com.picpay.desafio.android.utils.hide
 import com.picpay.desafio.android.utils.show
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.list_item_user.view.*
 
 class UserListAdapter : RecyclerView.Adapter<UserListAdapter.UserListItemViewHolder>() {
 
@@ -27,10 +26,10 @@ class UserListAdapter : RecyclerView.Adapter<UserListAdapter.UserListItemViewHol
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListItemViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_item_user, parent, false)
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ListItemUserBinding.inflate(inflater, parent, false)
 
-        return UserListItemViewHolder(view)
+        return UserListItemViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: UserListItemViewHolder, position: Int) {
@@ -39,22 +38,23 @@ class UserListAdapter : RecyclerView.Adapter<UserListAdapter.UserListItemViewHol
 
     override fun getItemCount(): Int = users.size
 
-    class UserListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class UserListItemViewHolder(private val itemBinding: ListItemUserBinding) :
+        RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(user: UserEntity) {
-            itemView.name.text = user.name
-            itemView.username.text = user.username
-            itemView.progressBar.visibility = View.VISIBLE
+            itemBinding.name.text = user.name
+            itemBinding.username.text = user.username
+            itemBinding.progressBar.show()
             Picasso.get()
                 .load(user.photo)
                 .error(R.drawable.ic_round_account_circle)
-                .into(itemView.picture, object : Callback {
+                .into(itemBinding.picture, object : Callback {
                     override fun onSuccess() {
-                        itemView.progressBar.hide()
+                        itemBinding.progressBar.hide()
                     }
 
                     override fun onError(e: Exception?) {
-                        itemView.progressBar.show()
+                        itemBinding.progressBar.show()
                     }
                 })
         }
