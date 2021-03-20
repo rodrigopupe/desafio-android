@@ -1,11 +1,11 @@
 package com.picpay.desafio.android
 
 import android.app.Application
+import com.picpay.desafio.android.core.NetworkConfig
 import com.picpay.desafio.android.di.networkModule
 import com.picpay.desafio.android.di.repositoryModule
 import com.picpay.desafio.android.di.useCaseModule
 import com.picpay.desafio.android.di.viewModelModule
-import com.picpay.desafio.android.core.NetworkConfig
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -31,7 +31,6 @@ class MyApplication : Application() {
                 viewModelModule
             )
         }
-
 
         networkConfig.initNetworkStateCallback()
     }

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.picpay.desafio.android.core.BaseResource
 import com.picpay.desafio.android.domain.entity.UserEntity
 import com.picpay.desafio.android.domain.usecase.GetUsersListUseCase
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val getUsersListUseCase: GetUsersListUseCase
@@ -20,10 +20,8 @@ class MainViewModel(
     fun getUsersList() {
         viewModelScope.launch {
             _usersListLiveData.value = BaseResource.Loading
-            withContext(Dispatchers.IO) {
-                val result = getUsersListUseCase.execute()
-                _usersListLiveData.postValue(result)
-            }
+            val result = getUsersListUseCase.execute()
+            _usersListLiveData.postValue(result)
         }
     }
 }
