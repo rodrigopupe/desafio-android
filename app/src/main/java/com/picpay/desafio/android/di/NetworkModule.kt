@@ -2,7 +2,9 @@ package com.picpay.desafio.android.di
 
 import com.google.gson.GsonBuilder
 import com.picpay.desafio.android.BuildConfig
+import com.picpay.desafio.android.core.CacheInterceptor
 import com.picpay.desafio.android.data.PicPayService
+import com.picpay.desafio.android.core.NetworkConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -10,13 +12,16 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val networkModule = module {
-    single { provideOkHttpClient() }
+    single { NetworkConfig(get()) }
+    single { provideOkHttpClient(get()) }
     single { provideRetrofit(get()) }
     single { providePicPayService(get()) }
 }
 
-fun provideOkHttpClient(): OkHttpClient {
+fun provideOkHttpClient(networkConfig: NetworkConfig): OkHttpClient {
     val cl = OkHttpClient.Builder()
+        .cache(networkConfig.getCache())
+        .addInterceptor(CacheInterceptor(networkConfig))
 
     if (BuildConfig.DEBUG) {
         val logging = HttpLoggingInterceptor()

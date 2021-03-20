@@ -61,8 +61,6 @@ class MainActivity : AppCompatActivity() {
         val message = getString(R.string.error)
         binding.recyclerView.hide()
 
-        Log.e("ERROR", "Detalhes do erro: $e")
-
         Toast.makeText(this, message, Toast.LENGTH_LONG)
             .show()
     }
