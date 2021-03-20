@@ -6,7 +6,6 @@ import com.picpay.desafio.android.core.BaseResource
 import com.picpay.desafio.android.domain.repository.UserRepository
 import com.picpay.desafio.android.factory.fakeNotFoundHttpException
 import com.picpay.desafio.android.factory.fakeUserEntityList
-import com.picpay.desafio.android.factory.fakeUserResponseList
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -28,7 +27,7 @@ class GetUsersListUseCaseTest {
 
     @Test
     fun `Should return a Success Resource when repository call is successfully`(): Unit = runBlocking {
-        whenever(userRepository.getUsers()).thenReturn(fakeUserResponseList)
+        whenever(userRepository.getUsers()).thenReturn(fakeUserEntityList)
         val result = getUsersListUseCase.execute()
         assert(result is BaseResource.Success)
         assertEquals((result as BaseResource.Success).data, fakeUserEntityList)

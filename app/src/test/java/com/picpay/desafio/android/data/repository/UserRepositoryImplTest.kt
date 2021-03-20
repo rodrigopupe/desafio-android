@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.picpay.desafio.android.data.PicPayService
 import com.picpay.desafio.android.domain.repository.UserRepository
 import com.picpay.desafio.android.factory.fakeNotFoundHttpException
+import com.picpay.desafio.android.factory.fakeUserEntityList
 import com.picpay.desafio.android.factory.fakeUserResponseList
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -30,7 +31,7 @@ class UserRepositoryImplTest {
     fun `Should return a list of users`(): Unit = runBlocking {
         whenever(service.getUsers()).thenReturn(fakeUserResponseList)
         val list = userRepository.getUsers()
-        assertEquals(list, fakeUserResponseList)
+        assertEquals(list, fakeUserEntityList)
         verify(service).getUsers()
     }
 

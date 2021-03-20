@@ -9,10 +9,7 @@ import com.picpay.desafio.android.core.BaseResource
 import com.picpay.desafio.android.domain.entity.UserEntity
 import com.picpay.desafio.android.domain.repository.UserRepository
 import com.picpay.desafio.android.domain.usecase.GetUsersListUseCase
-import com.picpay.desafio.android.factory.fakeBaseResourceFailure
-import com.picpay.desafio.android.factory.fakeBaseResourceSuccess
-import com.picpay.desafio.android.factory.fakeNotFoundHttpException
-import com.picpay.desafio.android.factory.fakeUserResponseList
+import com.picpay.desafio.android.factory.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -67,7 +64,7 @@ class MainViewModelTest {
 
     @Test
     fun `Should post a success data`(): Unit = runBlocking {
-        whenever(userRepository.getUsers()).thenReturn(fakeUserResponseList)
+        whenever(userRepository.getUsers()).thenReturn(fakeUserEntityList)
 
         mainViewModel.usersListResponse.observeForever(observer)
         mainViewModel.getUsersList()
