@@ -3,22 +3,35 @@ package com.picpay.desafio.android
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.platform.app.InstrumentationRegistry
+import com.picpay.desafio.android.utils.EspressoCountingIdlingResource
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.hamcrest.core.IsNot.not
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
-
 
 class MainActivityTest {
 
     private val server = MockWebServer()
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
+
+    @Before
+    fun setUp() {
+        IdlingRegistry.getInstance().register(EspressoCountingIdlingResource.countingIdlingResource)
+    }
+
+    @After
+    fun tearDown() {
+        IdlingRegistry.getInstance().unregister(EspressoCountingIdlingResource.countingIdlingResource)
+    }
 
     @Test
     fun shouldDisplayTitle() {
@@ -32,7 +45,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun shouldDisplayListItem() {
+    fun shouldDisplayListItems() {
         server.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse {
                 return when (request.path) {
@@ -45,7 +58,9 @@ class MainActivityTest {
         server.start(serverPort)
 
         launchActivity<MainActivity>().apply {
-            // TODO("validate if list displays items returned by server")
+            onView(withId(R.id.user_list_progress_bar)).check(matches(not(isDisplayed())))
+            onView(withId(R.id.recyclerView)).check(matches(isDisplayed()))
+            RecyclerViewMatchers.checkRecyclerViewItem(R.id.recyclerView, 0, withText("Eduardo Santos"))
         }
 
         server.close()
