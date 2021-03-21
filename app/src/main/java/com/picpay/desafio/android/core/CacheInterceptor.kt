@@ -11,7 +11,7 @@ class CacheInterceptor(private val networkConfig: NetworkConfig) : Interceptor {
                 .build()
         else
             chain.request().newBuilder()
-                .header("Cache-Control", "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 1) // 1 day
+                .header("Cache-Control", "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 1) // 1 dia
                 .build()
         return chain.proceed(request)
     }

@@ -1,10 +1,11 @@
-package com.picpay.desafio.android
+package com.picpay.desafio.android.ui
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.picpay.desafio.android.R
 import com.picpay.desafio.android.core.BaseResource
 import com.picpay.desafio.android.databinding.ActivityMainBinding
 import com.picpay.desafio.android.domain.entity.UserEntity
