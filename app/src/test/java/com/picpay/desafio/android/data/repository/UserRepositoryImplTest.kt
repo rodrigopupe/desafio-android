@@ -2,7 +2,7 @@ package com.picpay.desafio.android.data.repository
 
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import com.picpay.desafio.android.data.PicPayService
+import com.picpay.desafio.android.data.api.PicPayService
 import com.picpay.desafio.android.domain.repository.UserRepository
 import com.picpay.desafio.android.factory.fakeNotFoundHttpException
 import com.picpay.desafio.android.factory.fakeUserEntityList
@@ -39,6 +39,5 @@ class UserRepositoryImplTest {
     fun `Should throw an Exception when API has error`(): Unit = runBlocking {
         whenever(service.getUsers()).thenThrow(fakeNotFoundHttpException)
         userRepository.getUsers()
-        verify(service).getUsers()
     }
 }

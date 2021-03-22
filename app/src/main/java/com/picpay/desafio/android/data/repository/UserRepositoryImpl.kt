@@ -1,6 +1,6 @@
 package com.picpay.desafio.android.data.repository
 
-import com.picpay.desafio.android.data.PicPayService
+import com.picpay.desafio.android.data.api.PicPayService
 import com.picpay.desafio.android.domain.entity.UserEntity
 import com.picpay.desafio.android.domain.repository.UserRepository
 import com.picpay.desafio.android.utils.toUserEntity

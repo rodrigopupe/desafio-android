@@ -3,8 +3,8 @@ package com.picpay.desafio.android.di
 import com.google.gson.GsonBuilder
 import com.picpay.desafio.android.BuildConfig
 import com.picpay.desafio.android.core.CacheInterceptor
-import com.picpay.desafio.android.data.PicPayService
 import com.picpay.desafio.android.core.NetworkConfig
+import com.picpay.desafio.android.data.api.PicPayService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module

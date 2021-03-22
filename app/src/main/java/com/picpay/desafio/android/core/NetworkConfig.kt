@@ -6,16 +6,13 @@ import android.net.Network
 import android.net.NetworkRequest
 import android.os.Build
 import okhttp3.Cache
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import org.koin.java.KoinJavaComponent.inject
 
 class NetworkConfig(private val context: Context) {
 
     var connected: Boolean = false
 
     fun getCache(): Cache {
-        val cacheSize = (10 * 1024 * 1024).toLong()
+        val cacheSize = (10 * 1024 * 1024).toLong() // 10 MB
         return Cache(context.cacheDir, cacheSize)
     }
 
@@ -35,10 +32,10 @@ class NetworkConfig(private val context: Context) {
         }
 
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkRequest = NetworkRequest.Builder().build()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             connectivityManager.registerDefaultNetworkCallback(networkCallback)
         } else {
+            val networkRequest = NetworkRequest.Builder().build()
             connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
         }
     }

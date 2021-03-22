@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class UserEntity (
+data class UserEntity(
     val photo: String,
     val name: String,
     val id: Int,

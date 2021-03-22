@@ -28,15 +28,18 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.recyclerView.apply {
-            adapter = userListAdapter
-            layoutManager = LinearLayoutManager(this@MainActivity)
-        }
-
+        setupView()
         registerObservers()
 
         if (savedInstanceState == null) {
             getData()
+        }
+    }
+
+    private fun setupView() {
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = userListAdapter
         }
     }
 
@@ -64,8 +67,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showError() {
-        val message = getString(R.string.error)
         binding.recyclerView.hide()
+
+        val message = getString(R.string.error)
 
         Toast.makeText(this, message, Toast.LENGTH_LONG)
             .show()
